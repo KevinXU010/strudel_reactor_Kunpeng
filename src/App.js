@@ -26,16 +26,17 @@ export default function StrudelDemo() {
 const hasRun = useRef(false);
 const [controls, setControls] = useState({ p1Mode: "ON" });
 const [songText, setSongText] = useState("");
-function Proc() {
-        if (!globalEditor) return;
-        const replaced = preprocess(songText, controls);
+function Proc(override) {
+        const effective = override ?? controls;
+        const replaced = preprocess(songText, effective);
         globalEditor.setCode(replaced);
     }
-    function ProcAndPlay() {
-        if (globalEditor != null && globalEditor.repl.state.started === true) {
-            Proc();
+    function ProcAndPlay(override) {
+        if (globalEditor?.repl.state.started){
+            Proc(override);
             globalEditor.evaluate();
         }
+                    
     }
 
 useEffect(() => {
@@ -101,7 +102,7 @@ return (
                         <EditorPane />
                     </div>
                     <div className="col-md-4">
-                        <ControlPanel controls={controls} onChange={(patch) => {const next = { ...controls, ...patch }; setControls(next); ProcAndPlay(); }}/>  
+                        <ControlPanel controls={controls} onChange={(patch) => {const next = { ...controls, ...patch }; setControls(next); ProcAndPlay(next); }}/>  
                     </div>
                 </div>
             </div>
