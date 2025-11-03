@@ -21,17 +21,14 @@ const handleD3Data = (event) => {
     console.log(event.detail);
 };
 
-
-
 export default function StrudelDemo() {
 
 const hasRun = useRef(false);
 const [controls, setControls] = useState({ p1Mode: "ON" });
+const [songText, setSongText] = useState("");
 function Proc() {
         if (!globalEditor) return;
-        const el = document.getElementById('proc');
-        const raw = el?.value ?? "";
-        const replaced = preprocess(raw, controls);
+        const replaced = preprocess(songText, controls);
         globalEditor.setCode(replaced);
     }
     function ProcAndPlay() {
@@ -73,13 +70,11 @@ useEffect(() => {
                     );
                     await Promise.all([loadModules, registerSynthSounds(), registerSoundfonts()]);
                 },
-            });
-        document.getElementById('proc').value = stranger_tune 
-        const el = document.getElementById('proc');
-        if (el) {
-            const replaced = preprocess(el.value ?? "", { p1Mode: "ON" });
-            globalEditor.setCode(replaced);
-        }   
+            }); 
+        
+        setSongText(stranger_tune);
+        const replaced = preprocess(stranger_tune, { p1Mode: "ON" });
+        globalEditor?.setCode(replaced);
        
     }
 
@@ -95,10 +90,10 @@ return (
                 <div className="row">
                     <div className="col-md-8" style={{ maxHeight: '50vh', overflowY: 'auto' }}>
                         <label htmlFor="exampleFormControlTextarea1" className="form-label">Text to preprocess:</label>
-                        <PreprocInput />
+                        <PreprocInput value={songText} onChange={setSongText} />
                     </div>
                     <div className="col-md-4">
-                         <TransportBar onPreprocess={Proc}onProcPlay={ProcAndPlay} onPlay={() => globalEditor?.evaluate()} onStop={() => globalEditor?.stop()}/>
+                         <TransportBar onPreprocess={Proc} onProcPlay={ProcAndPlay} onPlay={() => globalEditor?.evaluate()} onStop={() => globalEditor?.stop()}/>
                     </div>
                 </div>
                 <div className="row">
