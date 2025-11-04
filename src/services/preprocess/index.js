@@ -1,22 +1,24 @@
-
 export function preprocess(inputText, controls) {
-  const text = String(inputText ?? "");
+  let text = String(inputText ?? "");
   const mode = controls?.p1Mode ?? "ON";
 
-  const p1OnBlock = `
-    p1:
-    n("0 2 4 6 7 6 4 2")
-    .s("supersaw")
-    .postgain(2.0)
-    `;
+  // // Read speed control command (ignores case, supports decimals)
+  const mSpeed = text.match(/\s*@speed\s+([0-9]*\.?[0-9]+)/i);
 
-  const hushBlock = ``;
+  // Delete all lines containing the `@speed` directive to avoid entering the final code.
+  text = text.replace(/^\s*\s*@speed\s+[0-9]*\.?[0-9]+\s*$/gim, "");
 
-  const token = /<p1_Radio>\s*/g;
-  const replacement = mode === "ON" ? `\n// [auto] p1 on\n${p1OnBlock}\n` : hushBlock;
+  
+  const inject =
+    mode === "ON" && mSpeed
+      ? `\n//speed up x${mSpeed[1]}\ncpm = cpm * ${mSpeed[1]};\n`
+      : "";
 
-  if (!token.test(text)) {
-    return text + replacement;
-  }
-  return text.replace(token, replacement);
+ 
+  if (!text.includes("<p1_Radio>")) return text;
+  return text.replace(/<p1_Radio>\s*/g, inject);
 }
+
+
+
+
