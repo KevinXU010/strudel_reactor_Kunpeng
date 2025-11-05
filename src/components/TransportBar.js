@@ -5,22 +5,24 @@ export default function TransportBar({
   onProcPlay,
   onPlay,
   onStop,
-}) {
+}) { 
   return (
-    <nav>
-      <button onClick={onPreprocess} className="btn btn-outline-primary">
-        Preprocess
-      </button>
-      <button onClick={onProcPlay} className="btn btn-outline-primary">
-        Proc &amp; Play
-      </button>
-      <br />
-      <button onClick={onPlay} className="btn btn-outline-primary">
-        Play
-      </button>
-      <button onClick={onStop} className="btn btn-outline-primary">
-        Stop
-      </button>
-    </nav>
+    <div className="card mb-3 shadow-sm">
+      <div className="card-header py-2">
+        <strong>Transport</strong>
+      </div>
+      <div className="card-body">
+        <div className="d-grid gap-2">
+          <div className="btn-group" role="group" aria-label="Preprocess actions">
+            <button onClick={onPreprocess} className="btn btn-primary btn-sm">Preprocess</button>
+            <button onClick={onProcPlay} className="btn btn-primary btn-sm">Proc&nbsp;&amp;&nbsp;Play</button>
+          </div>
+          <div className="btn-group" role="group" aria-label="Transport">
+            <button onClick={onPlay} className="btn btn-outline-secondary btn-sm">Play</button>
+            <button onClick={onStop} className="btn btn-outline-secondary btn-sm">Stop</button>
+          </div>
+        </div>
+      </div>
+    </div> 
   );
 }

@@ -36,3 +36,6 @@
     transform: rotate(360deg);
   }
 }
+.sticky-col { position: sticky; top: 16px; }
+.card { border-radius: 0.75rem; }
+.card-header { background: #f8f9fa; }
