@@ -15,6 +15,7 @@ import ControlPanel from './components/ControlPanel';
 import PreprocInput from './components/PreprocInput';
 import EditorPane from './components/EditorPane';
 import DJControl from "./components/DJControl";
+import VolumeControl from "./components/VolumeControl";
 
 let globalEditor = null;
 
@@ -34,6 +35,7 @@ function parseSpeedFromText(text) {
   const v = parseFloat(m[1]);
   return Number.isFinite(v) && v > 0 ? v : null;
 }
+
 function Proc(override) {
         const effective = override ?? controls;
         const replaced = preprocess(songText, effective);
@@ -113,6 +115,9 @@ return (
                     </div>
                     <div className="col-md-4">
                         <DJControl value={controls.speedMult ?? 1.0} onChange={(mult) => {const next = { ...controls, speedMult: mult };setControls(next);ProcAndPlay(next);}}/>
+                    </div>
+                    <div className="col-md-4">
+                        <VolumeControl value={controls.volume ?? 1.0} onChange={(v) => {const next = { ...controls, volume: v }; setControls(next); ProcAndPlay(next); }}/>
                     </div>
                     <div className="col-md-4">
                         <ControlPanel controls={controls} onChange={(patch) => {const next = { ...controls, ...patch }; setControls(next); ProcAndPlay(next); }}/>  

@@ -17,7 +17,7 @@ export default function DJControl({ value = 1.0, onChange }) {
       </div>
       <div className="card-body">
         <div className="d-flex align-items-center justify-content-between mb-2">
-          <div className="small text-muted">Playback Speed</div>
+          <div className="small text-muted">Play Speed</div>
           <div className="fw-semibold">×{value.toFixed(2)}</div>
         </div>
         <input type="range" className="form-range" min={min} max={max} step={step} value={value} onChange={handle} />
