@@ -93,41 +93,40 @@ useEffect(() => {
 
 
 return (
-    <div>
-        <h2>Strudel Demo</h2>
-        <main>
-
-            <div className="container-fluid">
-                <div className="row">
-                    <div className="col-md-8" style={{ maxHeight: '50vh', overflowY: 'auto' }}>
-                        <PreprocInput value={songText}  onChange={(txt) => {setSongText(txt); const parsed = parseSpeedFromText(txt); 
-                            if (parsed != null) {
-                                if (controls.speedFrom !== 'slider' || parsed !== (controls.speedMult ?? 1)) {const next = { ...controls, speedMult: parsed, speedFrom: 'text' };
-                                setControls(next);}}}}/>
-                    </div>
-                    <div className="col-md-4">
-                         <TransportBar onPreprocess={Proc} onProcPlay={ProcAndPlay} onPlay={() => globalEditor?.evaluate()} onStop={() => globalEditor?.stop()}/>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-md-8" style={{ maxHeight: '50vh', overflowY: 'auto' }}>
-                        <EditorPane />
-                    </div>
-                    <div className="col-md-4">
-                        <DJControl value={controls.speedMult ?? 1.0} onChange={(mult) => {const next = { ...controls, speedMult: mult };setControls(next);ProcAndPlay(next);}}/>
-                    </div>
-                    <div className="col-md-4">
-                        <VolumeControl value={controls.volume ?? 1.0} onChange={(v) => {const next = { ...controls, volume: v }; setControls(next); ProcAndPlay(next); }}/>
-                    </div>
-                    <div className="col-md-4">
-                        <ControlPanel controls={controls} onChange={(patch) => {const next = { ...controls, ...patch }; setControls(next); ProcAndPlay(next); }}/>  
-                    </div>
-                </div>
+  <div>
+    <h2 className="text-center my-3">Strudel Demo</h2>
+      <div className="container py-3">
+        <div className="row g-3">
+          <div className="col-md-8">
+            <div style={{ maxHeight: '50vh', overflowY: 'auto' }}>
+              <PreprocInput value={songText} onChange={(txt) => {setSongText(txt); const parsed = parseSpeedFromText(txt);
+                  if (parsed != null) {
+                    if (controls.speedFrom !== 'slider' || parsed !== (controls.speedMult ?? 1)) {
+                      const next = { ...controls, speedMult: parsed, speedFrom: 'text' };
+                      setControls(next);
+                    
+                    }
+                  }
+                }}/>
+            </div>
+            <div style={{ maxHeight: '50vh', overflowY: 'auto' }}>
+              <EditorPane />
             </div>
             <canvas id="roll"></canvas>
-        </main >
-    </div >
+          </div>
+          <div className="col-md-4">
+            <div className="sticky-col">
+              <TransportBar onPreprocess={Proc} onProcPlay={ProcAndPlay} onPlay={() => globalEditor?.evaluate()} onStop={() => globalEditor?.stop()}/>
+              <DJControl value={controls.speedMult ?? 1.0} onChange={(mult) => {const next = { ...controls, speedMult: mult, speedFrom: 'slider' }; setControls(next); ProcAndPlay(next);}}/>
+              <VolumeControl value={controls.volume ?? 1.0} onChange={(v) => {const next = { ...controls, volume: v }; setControls(next); ProcAndPlay(next);}}/>
+              <ControlPanel controls={controls} onChange={(patch) => {const next = { ...controls, ...patch }; setControls(next); ProcAndPlay(next);}}/>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
 );
+
 
 
 }
