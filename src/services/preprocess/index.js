@@ -2,22 +2,30 @@ export function preprocess(inputText, controls) {
   let text = String(inputText ?? "");
   const mode = controls?.p1Mode ?? "ON";
 
-  // // Read speed control command (ignores case, supports decimals)
-  const mSpeed = text.match(/\s*@speed\s+([0-9]*\.?[0-9]+)/i);
 
-  // Delete all lines containing the `@speed` directive to avoid entering the final code.
-  text = text.replace(/^\s*\s*@speed\s+[0-9]*\.?[0-9]+\s*$/gim, "");
+  let parsedFromText = 1;
+  const m = text.match(/s*@speed\s+([0-9]*\.?[0-9]+)/i);
+  if (m) {
+    const v = parseFloat(m[1]);
+    if (Number.isFinite(v) && v > 0) parsedFromText = v;
+  }
 
-  
-  const inject =
-    mode === "ON" && mSpeed
-      ? `\n//speed up x${mSpeed[1]}\ncpm = cpm * ${mSpeed[1]};\n`
-      : "";
+  text = text.replace(/s*@speed\s+[0-9]*\.?[0-9]+\s*$/gim, "");
+
+  const sliderMult = controls?.speedMult;
+  let mult =
+    Number.isFinite(sliderMult) && sliderMult > 0 ? sliderMult : parsedFromText;
 
  
+  const inject =
+    mode === "ON" && mult !== 1
+      ? `\n// [auto] speed x${mult}\ncpm = cpm * ${mult};\n`
+      : "";
+
   if (!text.includes("<p1_Radio>")) return text;
   return text.replace(/<p1_Radio>\s*/g, inject);
 }
+
 
 
 

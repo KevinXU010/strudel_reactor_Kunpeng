@@ -14,6 +14,7 @@ import TransportBar from './components/TransportBar';
 import ControlPanel from './components/ControlPanel';
 import PreprocInput from './components/PreprocInput';
 import EditorPane from './components/EditorPane';
+import DJControl from "./components/DJControl";
 
 let globalEditor = null;
 
@@ -26,6 +27,13 @@ export default function StrudelDemo() {
 const hasRun = useRef(false);
 const [controls, setControls] = useState({ p1Mode: "ON" });
 const [songText, setSongText] = useState("");
+
+function parseSpeedFromText(text) {
+  const m = String(text ?? "").match(/s*@speed\s+([0-9]*\.?[0-9]+)/i);
+  if (!m) return null;
+  const v = parseFloat(m[1]);
+  return Number.isFinite(v) && v > 0 ? v : null;
+}
 function Proc(override) {
         const effective = override ?? controls;
         const replaced = preprocess(songText, effective);
@@ -90,8 +98,10 @@ return (
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-md-8" style={{ maxHeight: '50vh', overflowY: 'auto' }}>
-                        <label htmlFor="exampleFormControlTextarea1" className="form-label">Text to preprocess:</label>
-                        <PreprocInput value={songText} onChange={setSongText} />
+                        <PreprocInput value={songText}  onChange={(txt) => {setSongText(txt); const parsed = parseSpeedFromText(txt); 
+                            if (parsed != null) {
+                                if (controls.speedFrom !== 'slider' || parsed !== (controls.speedMult ?? 1)) {const next = { ...controls, speedMult: parsed, speedFrom: 'text' };
+                                setControls(next);}}}}/>
                     </div>
                     <div className="col-md-4">
                          <TransportBar onPreprocess={Proc} onProcPlay={ProcAndPlay} onPlay={() => globalEditor?.evaluate()} onStop={() => globalEditor?.stop()}/>
@@ -100,6 +110,9 @@ return (
                 <div className="row">
                     <div className="col-md-8" style={{ maxHeight: '50vh', overflowY: 'auto' }}>
                         <EditorPane />
+                    </div>
+                    <div className="col-md-4">
+                        <DJControl value={controls.speedMult ?? 1.0} onChange={(mult) => {const next = { ...controls, speedMult: mult };setControls(next);ProcAndPlay(next);}}/>
                     </div>
                     <div className="col-md-4">
                         <ControlPanel controls={controls} onChange={(patch) => {const next = { ...controls, ...patch }; setControls(next); ProcAndPlay(next); }}/>  
