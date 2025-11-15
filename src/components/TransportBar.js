@@ -1,11 +1,6 @@
 import React from "react";
 
-export default function TransportBar({
-  onPreprocess,
-  onProcPlay,
-  onPlay,
-  onStop,
-}) { 
+export default function TransportBar({ onPreprocess, onProcPlay,onPlay,onStop,}) { 
   return (
     <div className="card mb-3 shadow-sm">
       <div className="card-header py-2">

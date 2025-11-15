@@ -28,7 +28,7 @@ const hasRun = useRef(false);
 const [controls, setControls] = useState({ p1Mode: "ON" });
 const [songText, setSongText] = useState("");
 
-//Parse the text for '@speed', used to synchronize DJControl slider values ​​(keeping the UI consistent with the text).
+//Parse the text for '@speed', used to synchronize DJControl slider values, keeping the UI consistent with the text.
 function parseSpeedFromText(text) {
   const m = String(text ?? "").match(/@speed\s+([0-9]*\.?[0-9]+)/i);
   if (!m) return null;
@@ -95,7 +95,7 @@ useEffect(() => {
 
 return (
   <div>
-    <h2 className="text-center my-3">Strudel Demo</h2>
+    <h2 className="title text-center my-3">Strudel<span className="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span> </h2>
       <div className="container py-3">
         <div className="row g-3">
           <div className="col-md-8">

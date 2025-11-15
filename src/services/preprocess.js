@@ -17,13 +17,13 @@ export function preprocess(inputText, controls) {
 
   const vol = Number.isFinite(controls?.volume) ? controls.volume : 1.0;
 
-  //print the injection block: Speed ​​(On only and != 1) + Volume (Inject as long as != 1 in any mode)
+  
   let inject = "";
   if (mode === "ON" && speedMult !== 1) {
     inject += `\n //speed x${speedMult}\n cpm = cpm * ${speedMult};\n`;
   }
   if (vol !== 1) {
-    inject += `\n //volume ×${vol}\n all(x => x.gain(${vol}));\n`;
+    inject += `\n //volume x${vol}\n all(x => x.gain(${vol}));\n`;
   }
 
   if (!text.includes("<p1_Radio>")) return text;

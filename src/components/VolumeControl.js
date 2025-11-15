@@ -15,12 +15,12 @@ export default function VolumeControl({ value = 1.0, onChange }) {
       </div>
       <div className="card-body">
         <div className="d-flex align-items-center justify-content-between mb-2">
-          <div className="fw-semibold">×{value.toFixed(2)}</div>
+          <div className="fw-semibold">x{value.toFixed(2)}</div>
         </div>
         <input type="range" className="form-range" min={min} max={max} step={step} value={value} onChange={handle}/>
         <div className="d-flex gap-2 mt-2">
-          <button className="btn btn-outline-secondary btn-sm" onClick={() => onChange?.(Math.max(min, +(value - step).toFixed(2)))}>−</button>
-          <button className="btn btn-outline-secondary btn-sm" onClick={() => onChange?.(Math.min(max, +(value + step).toFixed(2)))}>＋</button>
+          <button className="btn btn-outline-secondary btn-sm" onClick={() => onChange?.(Math.max(min, +(value - step).toFixed(2)))}>-</button>
+          <button className="btn btn-outline-secondary btn-sm" onClick={() => onChange?.(Math.min(max, +(value + step).toFixed(2)))}>+</button>
           <button className="btn btn-light btn-sm ms-auto" onClick={reset}>Reset</button>
         </div>
       </div>
