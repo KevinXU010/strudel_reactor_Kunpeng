@@ -11,7 +11,7 @@ export default function VolumeControl({ value = 1.0, onChange }) {
   return (
     <div className="card mb-3 shadow-sm sticky-col">
       <div className="card-header py-2">
-        <strong>Volume</strong>
+        <strong>🔊Volume</strong>
       </div>
       <div className="card-body">
         <div className="d-flex align-items-center justify-content-between mb-2">
