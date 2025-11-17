@@ -96,6 +96,10 @@ body { background: radial-gradient(1200px 800px at 30% -10%, #15152a 0%, #0b0b12
   box-shadow: 0 0 10px var(--accent);
 }
 
+.form-select:focus {
+  border-color: #22d3ee;
+  box-shadow: 0 0 0 .2rem rgba(34,211,238,.25);
+}
 
 
 
