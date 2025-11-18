@@ -16,7 +16,6 @@ export function preprocess(inputText, controls) {
   const speedMult = (Number.isFinite(sliderMult) && sliderMult > 0) ? sliderMult : parsedFromText;
 
   const vol = Number.isFinite(controls?.volume) ? controls.volume : 1.0;
-
   
   let inject = "";
   if (mode === "ON" && speedMult !== 1) {
@@ -26,8 +25,28 @@ export function preprocess(inputText, controls) {
     inject += `\n //volume x${vol}\n all(x => x.gain(${vol}));\n`;
   }
 
-  if (!text.includes("<p1_Radio>")) return text;
-  return text.replace(/<p1_Radio>\s*/g, inject);
+  const style = String(controls?.style ?? "DEFAULT").toUpperCase();
+  if (mode !== "HUSH") {
+      if (style === "GUITAR") {
+      
+      inject += `
+      \n//style: guitar
+      guitar:
+      note("[f4 g4 f4 g4 ab4 g4 f4@2] [eb4 f4 eb4 f4 c4 db4 eb4@2]")
+        .slow(4)
+        .sound("gm_electric_guitar_clean:4")
+        .lpf(2000)
+        .pan(0.6)
+        .gain(0.9)
+        \n`;
+    }
+  }
+
+  const token = /<p1_Radio>\s*/g;
+  if (token.test(text)) {
+    return text.replace(token, inject);
+  }
+  return text + inject;
 }
 
 

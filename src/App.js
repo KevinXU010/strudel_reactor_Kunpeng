@@ -18,6 +18,7 @@ import DJControl from "./components/DJControl";
 import VolumeControl from "./components/VolumeControl";
 
 
+
 let globalEditor = null;
 
 const handleD3Data = (event) => {
@@ -37,20 +38,47 @@ function parseSpeedFromText(text) {
   return Number.isFinite(v) && v > 0 ? v : null;
 }
 
-//Combine the text  with the current/temporary control state to form the final code and write it into the editor.
 function Proc(override) {
-  const effective = override ?? controls;
+  const effective0 = override ?? controls;
+
+  const effective =
+    effective0?.p1Mode === 'HUSH'
+      ? { ...effective0, volume: 0 }
+      : effective0;
+
   const replaced = preprocess(songText, effective);
   globalEditor.setCode(replaced);
 }
 
-//When REPL is already running, write the newest code first, then evaluate() to start/refresh playback.
 function ProcAndPlay(override) {
-  if (globalEditor?.repl.state.started){
+  if (globalEditor?.repl.state.started) {
     Proc(override);
     globalEditor.evaluate();
   }
 }
+
+useEffect(() => {
+  const onKey = (e) => {
+    const tag = (e.target && e.target.tagName || '').toLowerCase();
+    if (tag === 'input' || tag === 'textarea' || e.metaKey || e.ctrlKey || e.altKey) return;
+
+    let nextStyle = null;
+    switch ((e.key || '').toLowerCase()) {
+      case 'g': nextStyle = 'GUITAR'; break;
+      case 'n': nextStyle = 'DEFAULT'; break;
+      default: return;
+    }
+
+    const next = { ...controls, style: nextStyle };
+    setControls(next);
+    ProcAndPlay(next);
+    console.log(`[style] ${nextStyle}`);
+  };
+
+  window.addEventListener('keydown', onKey);
+  return () => window.removeEventListener('keydown', onKey);
+}, [controls]);  
+
 
 useEffect(() => {
  
@@ -113,6 +141,7 @@ return (
             </div>
             <div>
               <EditorPane/>
+
             </div>
             <canvas id="roll"></canvas>
           </div>
